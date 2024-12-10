@@ -1,0 +1,60 @@
+service: test-task-node
+frameworkVersion: '3'
+
+custom:
+  splitStacks:
+    perFunction: false
+    perType: false
+    perGroupFunction: true
+    nestedStackCount: 10
+
+  NODE_ENV: dev
+  MONGO_DB_URL: mongodb://localhost:27017/test
+
+  serverless-offline:
+    httpPort: 3001
+  serverless-offline-watcher:
+    - path:
+        - src/**/*.js
+      command: echo "js file in function folder was modified!"
+provider:
+  name: aws
+  region: eu-north-1
+  runtime: nodejs20.x
+  lambdaHashingVersion: 20201221
+  versionFunctions: false
+  environment:
+    MONGO_DB_URL: ${self:custom.MONGO_DB_URL}
+
+plugins:
+  - serverless-offline
+  - serverless-offline-watcher
+  - serverless-plugin-split-stacks
+
+functions:
+  testApi:
+    timeout: 30 # With cold starts this endpoint can be slow
+    memorySize: 512 # default is 1024
+    handler: src/functions/test.handler
+    reservedConcurrency: 4
+    events:
+      - http:
+          path: '/test'
+          method: get
+          cors:
+            origin: '*'
+            allowCredentials: false
+
+  getWeather:
+    handler: src/functions/weatherHandler.getWeather
+    events:
+      - http:
+          path: api/weather
+          method: get
+
+  togglePin:
+    handler: src/functions/weatherHandler.togglePin
+    events:
+      - http:
+          path: api/weather/togglePin
+          method: post
