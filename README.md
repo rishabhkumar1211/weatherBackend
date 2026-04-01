@@ -28,3 +28,15 @@ yarn serve:watch
 <h4>4. We are using middy for middleware, currently we have 'initDb' middleware initialise the connection to the mongodb</h4>
 <h4>5. Currently we have test API in 'src/functions/test.js' </h4>
 
+
+
+## Stats
+
+<!-- BADGES:START -->
+<!-- BADGES:END -->
+
+
+## Changelog
+
+<!-- CHANGELOG:START -->
+<!-- CHANGELOG:END -->
